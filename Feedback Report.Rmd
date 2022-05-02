@@ -9,19 +9,43 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
+library(readxl)
+# remotes::install_github("samuelkaminsky/SKTools")
+library(SKTools)
+library(plotly)
+library(psych)
+library(jtools)
 ```
 
 ```{r, include=FALSE}
+Engage <- read.csv("Engagement_Pos Qual_2022-05-01_Choice Text.csv", skip = 1) %>% 
+  slice(-1)
 
+Demographics <- Engage %>% 
+  select(Response.ID,Duration..in.seconds.,Finished,Location.Latitude,Location.Longitude,Emploment.Status=Which.of.the.following.categories.best.describes.your.employment.status.,
+         Industry=Which.of.the.following.categories.best.describes.the.industry.you.work.in.,Size.of.Organization=What.is.the.size.of.the.organization.you.work.for.,
+         Work.Arrangement=Which.of.the.following.categories.best.describes.your.current.work.arrangement.,Job.Title=What.is.your.job.title.,
+         Job.Managerial.Responsibilities=What.is.the.best.description.of.your.job.s.managerial.responsibilities., Age=Please.indicate.your.age, Education=Please.indicate.your.education.level,
+         Gender=To.which.gender.identity.do.you.most.identify.) %>% 
+  rename(Time=Duration..in.seconds.)
 ```
 
 
 ## Column {data-width="650"}
 
-### Chart A
+### Employeement Status
 
 ```{r}
+es <-Demographics %>% 
+  select(Emploment.Status) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  scale_fill_manual(values = c("#00c3e0", "#002046", "#F8BA4E", "#FFA28F", "#9CE8F2", "gray")) +
+  theme_nice()
+  
 
+ggplotly(es)
 ```
 
 ## Column {data-width="350"}
@@ -29,7 +53,15 @@ library(tidyverse)
 ### Chart B
 
 ```{r}
+i <-Demographics %>% 
+  select(Industry) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  theme_nice()
+  
 
+ggplotly(i)
 ```
 
 ### Chart C
