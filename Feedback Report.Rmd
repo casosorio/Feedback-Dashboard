@@ -1,9 +1,7 @@
 ---
-title: "Untitled"
+title: "Demographics Report"
 output: 
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+  flexdashboard::flex_dashboard
 ---
 
 ```{r setup, include=FALSE}
@@ -15,6 +13,7 @@ library(SKTools)
 library(plotly)
 library(psych)
 library(jtools)
+library(shiny)
 ```
 
 ```{r, include=FALSE}
@@ -30,10 +29,11 @@ Demographics <- Engage %>%
   rename(Time=Duration..in.seconds.)
 ```
 
+# Report 
 
-## Column {data-width="650"}
+This dashboard will report out all demographic variables we have from our Engagement Surver (Post Qualtric) 2022-05-01.
 
-### Employeement Status
+# Employeement Status {data-navmenu="Indicators"}
 
 ```{r}
 es <-Demographics %>% 
@@ -48,9 +48,7 @@ es <-Demographics %>%
 ggplotly(es)
 ```
 
-## Column {data-width="350"}
-
-### Chart B
+# Industry {data-navmenu="Indicators"}
 
 ```{r}
 i <-Demographics %>% 
@@ -64,8 +62,55 @@ i <-Demographics %>%
 ggplotly(i)
 ```
 
-### Chart C
+# Size of Organization {data-navmenu="Indicators"}
 
 ```{r}
+so <-Demographics %>% 
+  select(Size.of.Organization) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  theme_nice()
+  
 
+ggplotly(so)
+```
+
+# Gender {data-navmenu="Biodata"}
+```{r}
+gen <- Demographics %>% 
+  select(Gender) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  theme_nice()
+  
+
+ggplotly(gen)
+```
+
+# Age {data-navmenu="Biodata"}
+```{r}
+age <- Demographics %>% 
+  select(Age) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  theme_nice()
+  
+
+ggplotly(age)
+```
+
+# Education {data-navmenu="Biodata"}
+```{r}
+ed <- Demographics %>% 
+  select(Education) %>% 
+  frequencies(perc=T) %>% 
+  ggplot(., aes(x = value, y = perc, fill= value)) +
+  geom_bar(stat = "identity", position = position_dodge(), alpha = .7) +
+  theme_nice()
+  
+
+ggplotly(ed)
 ```
