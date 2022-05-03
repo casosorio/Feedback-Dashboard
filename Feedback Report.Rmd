@@ -81,9 +81,9 @@ ggplotly(items)
 # CFA {data-navmenu="Engagement"}
 ```{r, include=FALSE}
 substantive <-'
-Absorption=~Item_1 + Item_3  + Item_5  + Item_8  + Item_10 + Item_11
-Vigor=~Item_14 + Item_16 + Item_17 + Item_19 + Item_21 + Item_22
-Dedication=~Item_26 + Item_28 + Item_31 + Item_32 + Item_34 + Item_35
+Absorption=~Item_1 + Item_2  + Item_3  + Item_9  + Item_10 + Item_15 + Item_16
+Vigor=~Item_4 + Item_5 + Item_11 + Item_12 + Item_17 + Item_18
+Dedication=~Item_6 + Item_7 + Item_8 + Item_13 + Item_14 + Item_19 + Item_20
 '
 fullsub <- lavaan::cfa(substantive, data = Engage); plotfullsub <- fullsub
 fullsub <- as.data.frame(fitMeasures(fullsub))
@@ -93,13 +93,28 @@ t.fullsub <- fullsub %>%
 t.fullsub <- as.data.frame(t(t.fullsub[c(3,4,5,23,29,9,10,19),]))        ## Chi-sq, df, RMSEA, SRMR, CFI, TLI, AIC
 
 attiduinal <-'
-Cognitive=~Item_1+Item_3+ Item_14 + Item_16 + Item_26 + Item_28
-Affective=~Item_5+Item_8+ Item_17 + Item_19 + Item_31 + Item_32
-Behavioral=~Item_10+Item_11 + Item_21 + Item_22 + Item_34 + Item_35
+Cognitive=~Item_1 + Item_2 + Item_3 + Item_4 + Item_5 + Item_6 + Item_7 + Item_8
+Affective=~Item_9 + Item_10 + Item_11 + Item_12 + Item_13 + Item_14
+Behavioral=~Item_15 + Item_16 + Item_17 + Item_18 + Item_19 + Item_20
 '
 fullatt <- lavaan::cfa(attiduinal, data = Engage); plotfullatt <- fullatt
 fullatt <- as.data.frame(fitMeasures(fullatt))
 fullatt$rounded <- round(fullatt$`fitMeasures(fullatt)`,2)
+
+```
+Column {data-width=350}
+-----------------------------------------------------------------------
+```{r semplotsub, fig.cap="Omnibus Confirmatory Factor Analysis substantive structure."}
+
+semPlot::semPaths(plotfullsub,what="std", sizeLat=10, style="lisrel",
+              sizeMan=4.5,edge.label.cex=0.75, edge.color="black", asize=2, rotation=2)
+
+```
+
+```{r semplotatt, fig.cap="Omnibus Confirmatory Factor Analysis attitudinal structure."}
+
+semPlot::semPaths(plotfullatt,what="std", sizeLat=10, style="lisrel",
+              sizeMan=4.5,edge.label.cex=0.75, edge.color="black", asize=2, rotation=2)
 
 ```
 
